@@ -7,7 +7,6 @@
 - Abhishek Deshpande, asd27
 - Ayush Sharma, asa489
 - Bhavya Sankhla, bsa89
-- Rituraj Ojha
 
 
 ## **Title** 
