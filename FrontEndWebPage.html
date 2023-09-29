@@ -1,0 +1,139 @@
+<!-- This is the  code for the front end page which sends the request to the python flask server for getting recommended songs for a particular playist and disply those tracks on the front end-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Playlist Recommendations</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;	background-image:url('https://png.pngtree.com/background/20220729/original/pngtree-abstract-white-and-light-gray-wave-modern-soft-luxury-texture-with-picture-image_1859943.jpg');
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+        }
+		html{
+		   height:100%
+		}
+        #container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
+			background-color: rgba(255, 255, 255, 0.2);
+        }
+        #header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #name-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #aaa;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+			background-color: rgba(255, 255, 255, 0.2);
+        }
+        #submit-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 2px 2px 2px 0px rgba(0,0,0,0);
+        }
+        #submit-btn:hover {
+            background-color: #3e8e41;
+        }
+        .tile {
+            display: inline-block;
+            width: 180px;
+            height: 300px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.2);
+            text-align: center;
+            vertical-align: top;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .tile .title {
+                 font-size: 1.2rem;
+				 margin-bottom: 10px;
+                 font-family: math;
+                 color: azure;
+       }
+        .tile .artist {
+                font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-family: math;
+    color: azure;
+			
+        }
+		.tile audio {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="header"><h1>Playlist tracks Recommendations</h1></div>
+        <div>
+            <label for="name-input" >Enter your name:</label>
+            <br>
+            <input type="text" id="name-input" name="name">
+            <br>
+            <button type="button" id="submit-btn">Get recommendations</button>
+        </div>
+        <div id="tiles-container" style="
+    display: flex;
+    flex-wrap: wrap;
+"></div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#submit-btn').click(function() {
+                var name = $('#name-input').val();
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:5000/recommend?name=' + name,
+                    success: function(data) {
+                        var songs = data;
+												console.log(songs.length)
+						console.log(songs)
+                        var tiles = ''
+						for (var i = 0; i < 10; i++) {
+                            var song = songs[i];
+                            var previewUrl = song[3];
+							var externalUrl = song[4];
+							var imageUrl=song[2]
+							var pre_html=''
+							
+							
+                            tiles +=  '<div style="width:20%;"><div class="tile" style="background-image: url(' + imageUrl + ');">' +
+                             pre_html
+                             +
+                            '</div>'+'<a href="' + externalUrl + '" target="_blank" rel="noopener noreferrer">' +
+                            '<div ><div class="artist" style="margin-bottom: 10px; font-family: math; color: black; font-family: math;font-size: 1.4rem;	">' + song[0] + '</div>' +
+                            '<div class="artist" style="margin-bottom: 10px; font-family: math; color: black; font-family: math;font-size: 1.4rem;">' + song[1] + '</div></div>' +
+                            '</a>'+'</div>';
+                    }
+                    $('#tiles-container').html(tiles);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
